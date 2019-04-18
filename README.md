@@ -1,0 +1,1 @@
+# build-image [![Build Status](https://travis-ci.com/volker-raschek/build-image.svg?branch=master)](https://travis-ci.com/volker-raschek/build-image)

@@ -1,7 +1,7 @@
 # VERSION
 # If no version is specified as a parameter of make, the value latest
 # is taken.
-VERSION?=latest
+VERSION:=$(or ${TRAVIS_TAG}, ${TRAVIS_TAG}, latest)
 
 # DOCKER_USER
 DOCKER_USER:=volkerraschek
