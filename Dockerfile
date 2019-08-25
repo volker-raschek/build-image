@@ -3,9 +3,9 @@ FROM archlinux/base:latest
 RUN pacman --sync \
            --refresh \
            --noconfirm \
-           --sysupgrade go gcc make git go-bindata
+           --sysupgrade go gcc make git which
 
-ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="/root/.cargo/bin:/root/go/bin:${PATH}"
 
 COPY installation-scripts /tmp/installation-scripts
 RUN chmod +x /tmp/installation-scripts/* && \
