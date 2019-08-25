@@ -1,4 +1,7 @@
-# build-image [![Build Status](https://travis-ci.com/volker-raschek/build-image.svg?branch=master)](https://travis-ci.com/volker-raschek/build-image)
+# build-image
+
+[![Build Status](https://travis-ci.com/volker-raschek/build-image.svg?branch=master)](https://travis-ci.com/volker-raschek/build-image)
+[![Docker Pulls](https://img.shields.io/docker/pulls/volkerraschek/build-image)](https://hub.docker.com/r/volkerraschek/build-image)
 
 This project contains only files to build a build container image.
 
