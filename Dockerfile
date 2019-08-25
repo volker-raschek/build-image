@@ -5,12 +5,11 @@ RUN pacman --sync \
            --noconfirm \
            --sysupgrade go gcc make git go-bindata
 
-RUN curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/rustup.sh && \
-    chmod +x /tmp/rustup.sh && \
-    /tmp/rustup.sh -y && \
-    source ${HOME}/.cargo/env && \
-    rustup target add x86_64-unknown-linux-musl
+ENV PATH="/root/.cargo/bin:${PATH}"
 
-ENV PATH='/root/.cargo/bin:${PATH}'
+COPY installation-scripts /tmp/installation-scripts
+RUN chmod +x /tmp/installation-scripts/* && \
+    for f in $(ls /tmp/installation-scripts); do /tmp/installation-scripts/$f; done && \
+    rm -rf /tmp/installation-scripts
 
 WORKDIR /workspace

@@ -8,7 +8,6 @@ DOCKER_USER:=volkerraschek
 
 image-build:
 	docker build \
-		--no-cache \
 		--tag ${DOCKER_USER}/build-image:${VERSION} \
 		.
 
