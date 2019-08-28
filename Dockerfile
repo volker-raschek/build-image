@@ -3,7 +3,7 @@ FROM archlinux/base:latest
 RUN pacman --sync \
            --refresh \
            --noconfirm \
-           --sysupgrade go gcc make git which
+           --sysupgrade go gcc make git which zip
 
 ENV PATH="/root/.cargo/bin:/root/go/bin:${PATH}"
 
