@@ -10,6 +10,6 @@ ENV PATH="/root/.cargo/bin:/root/go/bin:${PATH}"
 COPY installation-scripts /tmp/installation-scripts
 RUN chmod +x /tmp/installation-scripts/* && \
     for f in $(ls /tmp/installation-scripts); do /tmp/installation-scripts/$f; done && \
-    rm -rf /tmp/installation-scripts
+    rm --recursive --force /tmp/installation-scripts
 
 WORKDIR /workspace
