@@ -1,55 +1,48 @@
-# CONTAINER_IMAGE_VERSION
-# Defines the version of the container image which has included the executable
-# binary. This is somethimes different to the variable CONTAINER_IMAGE_VERSION, because the
-# container image version should be latest instead contains the latest git tag
-# and hash sum.
-CONTAINER_IMAGE_VERSION:=$(or ${TRAVIS_TAG}, latest)
-
 # CONTAINER_RUNTIME
 # The CONTAINER_RUNTIME variable will be used to specified the path to a
-# container runtime. This is needed to build the container image.
-CONTAINER_RUNTIME:=$(shell which docker)
+# container runtime. This is needed to start and run a container image.
+CONTAINER_RUNTIME?=$(shell which docker)
 
-# DOCKER_USER
-# It's the username from hub.docker.io. The name in addition with the password
-# is necessary to upload the container image.
-DOCKER_USER:=volkerraschek
+# BASE_IMAGE
+# Defines the name of the container base image on which should be built the new
+# CONTAINER_IMAGE.
+BASE_IMAGE_REGISTRY_NAME:=docker.io
+BASE_IMAGE_NAMESPACE:=archlinux
+BASE_IMAGE_NAME:=base
+BASE_IMAGE_VERSION:=latest
+BASE_IMAGE_FULL=${BASE_IMAGE_REGISTRY_NAME}/${BASE_IMAGE_NAMESPACE}/${BASE_IMAGE_NAME}:${BASE_IMAGE_VERSION}
+BASE_IMAGE_SHORT=${BASE_IMAGE_NAMESPACE}/${BASE_IMAGE_NAME}:${BASE_IMAGE_VERSION}
 
-# IMAGE_NAME
-# The name of the container image.
-IMAGE_NAME:=build-image
+# CONTAINER_IMAGE_REGISTRY_NAME
+# Defines the name of the new container to be built using several variables.
+CONTAINER_IMAGE_REGISTRY_NAME:=docker.io
+CONTAINER_IMAGE_REGISTRY_USER:=volkerraschek
 
+CONTAINER_IMAGE_NAMESPACE?=${CONTAINER_IMAGE_REGISTRY_USER}
+CONTAINER_IMAGE_NAME:=build-image
+CONTAINER_IMAGE_VERSION?=latest
+CONTAINER_IMAGE_FULL=${CONTAINER_IMAGE_REGISTRY_NAME}/${CONTAINER_IMAGE_NAMESPACE}/${CONTAINER_IMAGE_NAME}:${CONTAINER_IMAGE_VERSION}
+CONTAINER_IMAGE_SHORT=${CONTAINER_IMAGE_NAMESPACE}/${CONTAINER_IMAGE_NAME}:${CONTAINER_IMAGE_VERSION}
 
 # BUILD CONTAINER IMAGE
 # ==============================================================================
-PHONY:=build
-build:
+PHONY:=container-image/build
+container-image/build:
 	${CONTAINER_RUNTIME} build \
+		--build-arg BASE_IMAGE=${BASE_IMAGE_FULL} \
 		--file Dockerfile \
 		--no-cache \
-		--tag ${DOCKER_USER}/${IMAGE_NAME}:${CONTAINER_IMAGE_VERSION} \
+		--pull \
+		--tag ${CONTAINER_IMAGE_FULL} \
+		--tag ${CONTAINER_IMAGE_SHORT} \
 		.
 
 # PUSH CONTAINER IMAGE
 # ==============================================================================
-PHONY+=push
-push: build
-	${CONTAINER_RUNTIME} login docker.io --username ${DOCKER_USER} --password ${DOCKER_PASSWORD}
-	${CONTAINER_RUNTIME} push ${DOCKER_USER}/${IMAGE_NAME}:${CONTAINER_IMAGE_VERSION}
-
-# UPDATE HUB.DOCKER.IO README
-# ==============================================================================
-PHONY+=update/readme
-update/readme:
-	${CONTAINER_RUNTIME} run \
-		--rm \
-		--env DOCKERHUB_USERNAME=${DOCKER_USER} \
-		--env DOCKERHUB_PASSWORD=${DOCKER_PASSWORD} \
-		--env DOCKERHUB_REPOSITORY=${DOCKER_USER}/${IMAGE_NAME} \
-		--env README_FILEPATH=./README.md \
-		--volume $(shell pwd):/workspace:ro \
-		--workdir=/workspace \
-		peterevans/dockerhub-description:latest
+PHONY+=container-image/push
+container-image/push:
+	echo ${CONTAINER_IMAGE_REGISTRY_PASSWORD} | ${CONTAINER_RUNTIME} login ${CONTAINER_IMAGE_REGISTRY_NAME} --username ${CONTAINER_IMAGE_REGISTRY_USER} --password-stdin
+	${CONTAINER_RUNTIME} push ${CONTAINER_IMAGE_FULL}
 
 # PHONY
 # ==============================================================================

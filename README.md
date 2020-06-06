@@ -1,9 +1,10 @@
 # build-image
 
-[![Build Status](https://travis-ci.com/volker-raschek/build-image.svg?branch=master)](https://travis-ci.com/volker-raschek/build-image)
+[![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/build-image/status.svg)](https://drone.cryptic.systems/volker.raschek/build-image)
 [![Docker Pulls](https://img.shields.io/docker/pulls/volkerraschek/build-image)](https://hub.docker.com/r/volkerraschek/build-image)
 
-This project, hosted on [github](https://github.com/volker-raschek/build-image),
+This project, hosted on
+[git.cryptic.systems](https://git.cryptic.systems/volker.raschek/build-image),
 contains only files to build a build container image.
 
 ## Usage
@@ -23,7 +24,8 @@ $ docker run \
 
 ### rust
 
-If you want to compile instead go rust sourcecode, than you can do it similar to the golang example.
+If you want to compile instead go rust sourcecode, than you can do it similar to
+the golang example.
 
 ```bash
 $ docker run \

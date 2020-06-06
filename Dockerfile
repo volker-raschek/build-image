@@ -1,4 +1,6 @@
-FROM archlinux/base:latest
+ARG BASE_IMAGE
+
+FROM ${BASE_IMAGE}
 
 COPY installation-scripts /tmp/installation-scripts
 RUN  /tmp/installation-scripts/00-pacman-mirror.sh
@@ -6,7 +8,7 @@ RUN  /tmp/installation-scripts/00-pacman-mirror.sh
 RUN pacman --sync \
            --refresh \
            --noconfirm \
-           --sysupgrade go gcc make git rpm-builder which zip
+           --sysupgrade docker go gcc make git rpm-builder which zip
 
 ENV PATH="/root/.cargo/bin:/root/go/bin:${PATH}"
 

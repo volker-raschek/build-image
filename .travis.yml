@@ -1,6 +1,0 @@
-services:
-  - docker
-
-script:
-  - make push
-  - make update/readme
