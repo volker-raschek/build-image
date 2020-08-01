@@ -11,8 +11,8 @@ pacman-key --lsign 9B146D11A9ED6CA7E279EB1A852BCC170D81A982
 cat >> /etc/pacman.conf << 'EOF'
 
 [cs_any]
-Server = https://arch.cryptic.systems/any/
+Server = https://aur.cryptic.systems/any/
 
 [cs_x86_64]
-Server = https://arch.cryptic.systems/x86_64/
+Server = https://aur.cryptic.systems/x86_64/
 EOF
