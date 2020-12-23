@@ -14,8 +14,14 @@ RUN  /tmp/installation-scripts/00-pacman-mirror.sh
 RUN pacman --sync \
            --refresh \
            --noconfirm \
-           --sysupgrade rpm-builder
-
+           --sysupgrade \
+              oracle-instantclient-basic \
+              oracle-instantclient-jdbc \
+              oracle-instantclient-odbc \
+              oracle-instantclient-sdk \
+              oracle-instantclient-sqlplus \
+              oracle-instantclient-tools \
+              rpm-builder
 
 ENV PATH="/root/.cargo/bin:/root/go/bin:${PATH}"
 

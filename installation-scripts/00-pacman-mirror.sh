@@ -21,4 +21,8 @@ Server = https://aur.cryptic.systems/any/
 
 [x86_64]
 Server = https://aur.cryptic.systems/x86_64/
+
+[oracle]
+SigLevel = Optional TrustAll
+Server = http://linux.shikadi.net/arch/oracle/x86_64/
 EOF
