@@ -4,9 +4,6 @@ name: build-image-x86_64
 
 steps:
 
-# BUILD
-###############################################################################
-
 - name: build-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
@@ -17,9 +14,6 @@ steps:
   when:
     branch:
     - master
-
-# PUSH
-###############################################################################
 
 - name: push-image-latest
   image: docker.io/volkerraschek/build-image:latest
@@ -36,6 +30,7 @@ steps:
     - master
     event:
     - push
+    - cron
 
 - name: push-image-tagged
   image: docker.io/volkerraschek/build-image:latest
@@ -54,9 +49,6 @@ steps:
     event:
     - tag
 
-# NOTIFY
-###############################################################################
-
 - name: notify
   image: drillster/drone-email
   environment:
@@ -72,9 +64,6 @@ steps:
     status:
     - changed
     - failure
-
-# VOLUMES
-###############################################################################
 
 volumes:
 - name: docker_socket
