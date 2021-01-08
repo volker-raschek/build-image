@@ -15,6 +15,7 @@ RUN pacman --sync \
            --refresh \
            --noconfirm \
            --sysupgrade \
+              docker-pushrm \
               oracle-instantclient-basic \
               oracle-instantclient-jdbc \
               oracle-instantclient-odbc \
