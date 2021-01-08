@@ -37,6 +37,13 @@ container-image/build:
 		--tag ${CONTAINER_IMAGE_SHORT} \
 		.
 
+# DELETE CONTAINER IMAGE
+# ==============================================================================
+PHONY:=container-image/delete
+container-image/delete:
+	- ${CONTAINER_RUNTIME} image rm ${CONTAINER_IMAGE_FULL} ${CONTAINER_IMAGE_SHORT}
+	- ${CONTAINER_RUNTIME} image rm ${BASE_IMAGE_FULL}
+
 # PUSH CONTAINER IMAGE
 # ==============================================================================
 PHONY+=container-image/push

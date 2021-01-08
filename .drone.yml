@@ -3,7 +3,6 @@ type: docker
 name: build-image-x86_64
 
 steps:
-
 - name: build-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
@@ -21,33 +20,24 @@ steps:
   - make container-image/push
   environment:
     CONTAINER_IMAGE_REGISTRY_PASSWORD:
-      from_secret: CONTAINER_IMAGE_REGISTRY_PASSWORD
+      from_secret: container_image_registry_password
   volumes:
   - name: docker_socket
     path: /var/run/docker.sock
   when:
     branch:
     - master
-    event:
-    - push
-    - cron
 
-- name: push-image-tagged
+- name: delete-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
-  - make container-image/push
-  environment:
-    CONTAINER_IMAGE_VERSION: ${DRONE_TAG}
-    CONTAINER_IMAGE_REGISTRY_PASSWORD:
-      from_secret: CONTAINER_IMAGE_REGISTRY_PASSWORD
+  - make container-image/delete
   volumes:
   - name: docker_socket
     path: /var/run/docker.sock
   when:
     branch:
     - master
-    event:
-    - tag
 
 - name: notify
   image: drillster/drone-email
