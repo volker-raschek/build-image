@@ -39,6 +39,20 @@ steps:
     branch:
     - master
 
+- name: push-readme
+  image: docker.io/volkerraschek/build-image:latest
+  commands:
+  - make push/README
+  environment:
+    CONTAINER_IMAGE_REGISTRY_PASSWORD:
+      from_secret: container_image_registry_password
+  volumes:
+  - name: docker_socket
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - master
+
 - name: notify
   image: drillster/drone-email
   environment:

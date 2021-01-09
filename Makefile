@@ -51,6 +51,13 @@ container-image/push:
 	echo ${CONTAINER_IMAGE_REGISTRY_PASSWORD} | ${CONTAINER_RUNTIME} login ${CONTAINER_IMAGE_REGISTRY_NAME} --username ${CONTAINER_IMAGE_REGISTRY_USER} --password-stdin
 	${CONTAINER_RUNTIME} push ${CONTAINER_IMAGE_FULL}
 
+# PUSH README
+# ==============================================================================
+PHONY+=push/README
+push/README:
+	echo ${CONTAINER_IMAGE_REGISTRY_PASSWORD} | ${CONTAINER_RUNTIME} login ${CONTAINER_IMAGE_REGISTRY_NAME} --username ${CONTAINER_IMAGE_REGISTRY_USER} --password-stdin
+	docker pushrm ${CONTAINER_IMAGE_FULL}
+
 # PHONY
 # ==============================================================================
 # Declare the contents of the PHONY variable as phony.  We keep that information
