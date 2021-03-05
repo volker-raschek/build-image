@@ -5,7 +5,17 @@ FROM ${BASE_IMAGE}
 RUN pacman --sync \
            --refresh \
            --noconfirm \
-           --sysupgrade awk bash-completion docker go gcc make git which zip
+           --sysupgrade \
+            awk \
+            bash-completion \
+            docker \
+            gcc \
+            git \
+            go \
+            make \
+            podman \
+            which \
+            zip
 
 COPY installation-scripts /tmp/installation-scripts
 

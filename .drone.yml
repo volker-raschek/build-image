@@ -6,7 +6,7 @@ steps:
 - name: build-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
-  - make container-image/build
+  - make CONTAINER_RUNTIME=docker container-image/build
   volumes:
   - name: docker_socket
     path: /var/run/docker.sock
@@ -17,7 +17,7 @@ steps:
 - name: push-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
-  - make container-image/push
+  - make CONTAINER_RUNTIME=docker container-image/push
   environment:
     CONTAINER_IMAGE_REGISTRY_PASSWORD:
       from_secret: container_image_registry_password
@@ -31,21 +31,7 @@ steps:
 - name: delete-image-latest
   image: docker.io/volkerraschek/build-image:latest
   commands:
-  - make container-image/delete
-  volumes:
-  - name: docker_socket
-    path: /var/run/docker.sock
-  when:
-    branch:
-    - master
-
-- name: push-readme
-  image: docker.io/volkerraschek/build-image:latest
-  commands:
-  - make push/README
-  environment:
-    CONTAINER_IMAGE_REGISTRY_PASSWORD:
-      from_secret: container_image_registry_password
+  - make CONTAINER_RUNTIME=docker container-image/delete
   volumes:
   - name: docker_socket
     path: /var/run/docker.sock
