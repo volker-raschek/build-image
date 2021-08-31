@@ -3,9 +3,9 @@
 [![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/build-image/status.svg)](https://drone.cryptic.systems/volker.raschek/build-image)
 [![Docker Pulls](https://img.shields.io/docker/pulls/volkerraschek/build-image)](https://hub.docker.com/r/volkerraschek/build-image)
 
-This project, hosted on
-[git.cryptic.systems](https://git.cryptic.systems/volker.raschek/build-image),
-contains only files to build a build container image.
+This project contains all sources to build the container image
+`docker.io/volkerraschek/build-image`. The primary goal of the image is only
+to provide an environment to compile source code like go or rust.
 
 ## Usage
 
