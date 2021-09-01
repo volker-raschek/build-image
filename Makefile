@@ -36,7 +36,7 @@ container-image/delete:
 # ==============================================================================
 PHONY+=container-image/push
 container-image/push:
-	${CONTAINER_RUNTIME} login ${BUILD_IMAGE_REGISTRY_HOST} --username ${BUILD_IMAGE_REGISTRY_USER} --password ${BUILD_IMAGE_REGISTRY_PASSWORD}
+	echo ${BUILD_IMAGE_REGISTRY_PASSWORD} | ${CONTAINER_RUNTIME} login ${BUILD_IMAGE_REGISTRY_HOST} --username ${BUILD_IMAGE_REGISTRY_USER} --password-stdin
 	${CONTAINER_RUNTIME} push ${BUILD_IMAGE_FULLY_QUALIFIED}
 
 # PHONY
