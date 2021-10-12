@@ -1,0 +1,14 @@
+image: volkerraschek/build-image:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}
+{{#if build.tags}}
+tags:
+{{#each build.tags}}
+  - {{this}}
+{{/each}}
+  - "latest"
+{{/if}}
+manifests:
+  -
+    image: volkerraschek/build-image:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}-amd64
+    platform:
+      architecture: amd64
+      os: linux
