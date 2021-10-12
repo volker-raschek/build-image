@@ -293,7 +293,7 @@ steps:
     - failure
 
 depends_on:
-- tagged-manifest
+- latest-manifest
 
 trigger:
   branch:
