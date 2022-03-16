@@ -14,13 +14,9 @@ pacman-key --init
 # Add additional pacman mirrors
 cat >> /etc/pacman.conf <<EOF
 
-[any]
+[volker.raschek]
 SigLevel = Optional TrustAll
-Server = https://aur.cryptic.systems/any/
-
-[x86_64]
-SigLevel = Optional TrustAll
-Server = https://aur.cryptic.systems/x86_64/
+Server = https://aur.cryptic.systems/$repo/$arch/
 
 [oracle]
 SigLevel = Optional TrustAll
