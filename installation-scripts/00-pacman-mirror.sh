@@ -16,7 +16,7 @@ cat >> /etc/pacman.conf <<EOF
 
 [volker.raschek]
 SigLevel = Optional TrustAll
-Server = https://aur.cryptic.systems/$repo/$arch/
+Server = https://aur.cryptic.systems/volker.raschek/x86_64/
 
 [oracle]
 SigLevel = Optional TrustAll
