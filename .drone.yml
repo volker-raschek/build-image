@@ -302,8 +302,8 @@ steps:
       from_secret: smtp_mail_address
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     status:
     - changed
