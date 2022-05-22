@@ -14,8 +14,8 @@ steps:
   image: docker.io/volkerraschek/markdownlint:0.31.1
   resources:
     limits:
-      cpu: 50
-      memory: 50M
+      cpu: 150
+      memory: 150M
 
 - name: email-notification
   environment:
@@ -30,8 +30,8 @@ steps:
   image: docker.io/drillster/drone-email:latest
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     status:
     - changed
@@ -53,7 +53,7 @@ platform:
 
 steps:
 - name: build
-  image: plugins/docker
+  image: docker.io/plugins/docker:latest
   settings:
     dockerfile: Dockerfile
     auto_tag: false
@@ -114,7 +114,7 @@ platform:
 
 steps:
 - name: build
-  image: plugins/docker
+  image: docker.io/plugins/docker:latest
   settings:
     dockerfile: Dockerfile
     auto_tag: false
@@ -169,7 +169,11 @@ name: latest-manifest
 
 steps:
 - name: build-manifest
-  image: plugins/manifest
+  image: docker.io/plugins/manifest:latest
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
   settings:
     auto_tag: false
     ignore_missing: true
@@ -192,8 +196,8 @@ steps:
       from_secret: smtp_mail_address
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     status:
     - changed
@@ -222,7 +226,7 @@ platform:
 
 steps:
 - name: build
-  image: plugins/docker
+  image: docker.io/plugins/docker:latest
   settings:
     dockerfile: Dockerfile
     auto_tag: true
@@ -271,7 +275,11 @@ name: tagged-manifest
 
 steps:
 - name: build-manifest
-  image: plugins/manifest
+  image: docker.io/plugins/manifest:latest
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
   settings:
     auto_tag: true
     ignore_missing: true
