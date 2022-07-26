@@ -49,6 +49,9 @@ kind: pipeline
 type: docker
 name: dry-run-amd64
 
+depends_on:
+- linter
+
 platform:
   os: linux
   arch: amd64
@@ -67,9 +70,6 @@ steps:
     password:
       from_secret: container_image_registry_password
     no_cache: true
-  volumes:
-  - name: docker_socket
-    path: /var/run/docker.sock
 
 - name: email-notification
   environment:
@@ -88,14 +88,6 @@ steps:
     status:
     - changed
     - failure
-
-volumes:
-- name: docker_socket
-  host:
-    path: /var/run/docker.sock
-
-depends_on:
-- linter
 
 trigger:
   branch:
@@ -129,9 +121,6 @@ steps:
     password:
       from_secret: container_image_registry_password
     no_cache: true
-  volumes:
-  - name: docker_socket
-    path: /var/run/docker.sock
 
 - name: email-notification
   environment:
@@ -151,11 +140,6 @@ steps:
     - changed
     - failure
 
-volumes:
-- name: docker_socket
-  host:
-    path: /var/run/docker.sock
-
 depends_on:
 - linter
 
@@ -172,6 +156,9 @@ trigger:
 kind: pipeline
 type: kubernetes
 name: latest-manifest
+
+depends_on:
+- latest-amd64
 
 steps:
 - name: build-manifest
@@ -211,9 +198,6 @@ steps:
     - changed
     - failure
 
-depends_on:
-- latest-amd64
-
 trigger:
   branch:
   - master
@@ -245,9 +229,6 @@ steps:
     password:
       from_secret: container_image_registry_password
     no_cache: true
-  volumes:
-  - name: docker_socket
-    path: /var/run/docker.sock
 
 - name: email-notification
   environment:
@@ -266,11 +247,6 @@ steps:
     status:
     - changed
     - failure
-
-volumes:
-- name: docker_socket
-  host:
-    path: /var/run/docker.sock
 
 trigger:
   event:
