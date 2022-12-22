@@ -12,7 +12,6 @@ done
 
 # import gpg key
 if [ ! -z ${GPG_KEY+x} ]; then
-
   echo -e ${GPG_KEY} | gpg --import
 
   # trust gpg key
