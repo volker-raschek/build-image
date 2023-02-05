@@ -26,7 +26,7 @@ if [ ! -z ${SSH_KEY+x} ]; then
   sudo chmod 0700 ${HOME}/.ssh
   echo -e ${SSH_KEY} > ${HOME}/.ssh/key
   sudo chmod 0600 ${HOME}/.ssh/key
-  echo -e "Host *\n  IdentityFile ~/.ssh/key" > ${HOME}/.ssh/config
+  echo -e "Host *\n  IdentityFile ~/.ssh/key\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n" > ${HOME}/.ssh/config
 fi
 
 /bin/bash ${@}

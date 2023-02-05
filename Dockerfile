@@ -25,10 +25,13 @@ RUN sudo pacman --sync --refresh --noconfirm --sysupgrade \
       gnupg \
       go \
       make \
+      openssh \
       pacman-contrib \
       podman \
+      vim \
       which \
-      zip
+      zip && \
+    sudo rm --recursive --force /var/cache/pacman/pkg/*
 
 RUN sudo usermod --append --groups docker ${BUILD_USER}
 
@@ -42,6 +45,7 @@ RUN sudo pacman --sync --refresh --noconfirm --sysupgrade \
       oracle-instantclient-tools \
       rpm-builder
 
+RUN sudo mkdir /workspace && sudo chown ${BUILD_USER}:${BUILD_USER} /workspace
 WORKDIR /workspace
 VOLUME [ "/workspace" ]
 
