@@ -6,10 +6,6 @@ name: linter
 clone:
   disable: true
 
-platform:
-  os: linux
-  arch: amd64
-
 steps:
 - name: clone
   image: git.cryptic.systems/volker.raschek/git:1.2.1
@@ -72,16 +68,21 @@ steps:
 - name: build
   image: docker.io/plugins/docker:20.10.9
   settings:
-    dockerfile: Dockerfile
     auto_tag: false
+    dockerfile: Dockerfile
     dry_run: true
-    tags: latest-amd64
-    repo: volkerraschek/build-image
-    username:
-      from_secret: container_image_registry_user
-    password:
-      from_secret: container_image_registry_password
+    force_tag: true
     no_cache: true
+    purge: true
+    mirror:
+      from_secret: docker_io_mirror
+    registry: git.cryptic.systems
+    repo: git.cryptic.systems/volker.raschek/build-image
+    tags: latest-amd64
+    username:
+      from_secret: git_cryptic_systems_container_registry_user
+    password:
+      from_secret: git_cryptic_systems_container_registry_password
 
 - name: email-notification
   environment:
@@ -119,6 +120,9 @@ name: latest-amd64
 clone:
   disable: true
 
+depends_on:
+- linter
+
 platform:
   os: linux
   arch: amd64
@@ -130,15 +134,20 @@ steps:
 - name: build
   image: docker.io/plugins/docker:20.10.9
   settings:
-    dockerfile: Dockerfile
     auto_tag: false
-    tags: latest-amd64
-    repo: volkerraschek/build-image
-    username:
-      from_secret: container_image_registry_user
-    password:
-      from_secret: container_image_registry_password
+    dockerfile: Dockerfile
+    force_tag: true
     no_cache: true
+    purge: true
+    mirror:
+      from_secret: docker_io_mirror
+    registry: git.cryptic.systems
+    repo: git.cryptic.systems/volker.raschek/build-image
+    tags: latest-amd64
+    username:
+      from_secret: git_cryptic_systems_container_registry_user
+    password:
+      from_secret: git_cryptic_systems_container_registry_password
 
 - name: email-notification
   environment:
@@ -157,9 +166,6 @@ steps:
     status:
     - changed
     - failure
-
-depends_on:
-- linter
 
 trigger:
   branch:
@@ -181,24 +187,85 @@ clone:
 depends_on:
 - latest-amd64
 
+# docker.io/plugins/manifest only for amd64 architectures available
+node_selector:
+  kubernetes.io/os: linux
+  kubernetes.io/arch: amd64
+
 steps:
 - name: clone
   image: git.cryptic.systems/volker.raschek/git:1.2.1
 
 - name: build-manifest
-  image: docker.io/plugins/manifest:latest
-  resources:
-    limits:
-      cpu: 150
-      memory: 150M
+  image: docker.io/plugins/manifest:1.4.0
   settings:
     auto_tag: false
     ignore_missing: true
     spec: manifest.tmpl
     username:
-      from_secret: container_image_registry_user
+      from_secret: git_cryptic_systems_container_registry_user
     password:
+      from_secret: git_cryptic_systems_container_registry_password
+
+- name: email-notification
+  environment:
+    SMTP_FROM_ADDRESS:
+      from_secret: smtp_from_address
+    SMTP_FROM_NAME:
+      from_secret: smtp_from_name
+    SMTP_HOST:
+      from_secret: smtp_host
+    SMTP_USERNAME:
+      from_secret: smtp_username
+    SMTP_PASSWORD:
+      from_secret: smtp_password
+  image: git.cryptic.systems/volker.raschek/drone-email:0.1.2
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+  when:
+    status:
+    - changed
+    - failure
+
+trigger:
+  branch:
+  - master
+  event:
+  - cron
+  - push
+  repo:
+  - volker.raschek/build-image
+
+---
+kind: pipeline
+type: kubernetes
+name: latest-sync
+
+clone:
+  disable: true
+
+depends_on:
+- latest-manifest
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.2.1
+
+- name: latest-sync
+  commands:
+  - skopeo sync --all --src=docker --src-creds=$SRC_CRED_USERNAME:$SRC_CRED_PASSWORD --dest=docker --dest-creds=$DEST_CRED_USERNAME:$DEST_CRED_PASSWORD git.cryptic.systems/volker.raschek/build-image docker.io/volkerraschek
+  environment:
+    SRC_CRED_USERNAME:
+      from_secret: git_cryptic_systems_container_registry_user
+    SRC_CRED_PASSWORD:
+      from_secret: git_cryptic_systems_container_registry_password
+    DEST_CRED_USERNAME:
+      from_secret: container_image_registry_user
+    DEST_CRED_PASSWORD:
       from_secret: container_image_registry_password
+  image: quay.io/skopeo/stable:v1.12.0
 
 - name: email-notification
   environment:
@@ -250,15 +317,20 @@ steps:
 - name: build
   image: docker.io/plugins/docker:20.10.9
   settings:
-    dockerfile: Dockerfile
     auto_tag: true
     auto_tag_suffix: amd64
-    repo: volkerraschek/build-image
-    username:
-      from_secret: container_image_registry_user
-    password:
-      from_secret: container_image_registry_password
+    dockerfile: Dockerfile
+    force_tag: true
     no_cache: true
+    purge: true
+    mirror:
+      from_secret: docker_io_mirror
+    registry: git.cryptic.systems
+    repo: git.cryptic.systems/volker.raschek/build-image
+    username:
+      from_secret: git_cryptic_systems_container_registry_user
+    password:
+      from_secret: git_cryptic_systems_container_registry_password
 
 - name: email-notification
   environment:
@@ -292,24 +364,28 @@ name: tagged-manifest
 clone:
   disable: true
 
+depends_on:
+- tagged-amd64
+
+# docker.io/plugins/manifest only for amd64 architectures available
+node_selector:
+  kubernetes.io/os: linux
+  kubernetes.io/arch: amd64
+
 steps:
 - name: clone
   image: git.cryptic.systems/volker.raschek/git:1.2.1
 
 - name: build-manifest
-  image: docker.io/plugins/manifest:latest
-  resources:
-    limits:
-      cpu: 150
-      memory: 150M
+  image: docker.io/plugins/manifest:1.4.0
   settings:
     auto_tag: true
     ignore_missing: true
     spec: manifest.tmpl
     username:
-      from_secret: container_image_registry_user
+      from_secret: git_cryptic_systems_container_registry_user
     password:
-      from_secret: container_image_registry_password
+      from_secret: git_cryptic_systems_container_registry_password
 
 - name: email-notification
   environment:
@@ -333,8 +409,62 @@ steps:
     - changed
     - failure
 
+trigger:
+  event:
+  - tag
+  repo:
+  - volker.raschek/build-image
+
+---
+kind: pipeline
+type: kubernetes
+name: tagged-sync
+
+clone:
+  disable: true
+
 depends_on:
-- tagged-amd64
+- tagged-manifest
+
+steps:
+- name: clone
+  image: git.cryptic.systems/volker.raschek/git:1.2.1
+
+- name: tagged-sync
+  commands:
+  - skopeo sync --all --src=docker --src-creds=$SRC_CRED_USERNAME:$SRC_CRED_PASSWORD --dest=docker --dest-creds=$DEST_CRED_USERNAME:$DEST_CRED_PASSWORD git.cryptic.systems/volker.raschek/build-image docker.io/volkerraschek
+  environment:
+    SRC_CRED_USERNAME:
+      from_secret: git_cryptic_systems_container_registry_user
+    SRC_CRED_PASSWORD:
+      from_secret: git_cryptic_systems_container_registry_password
+    DEST_CRED_USERNAME:
+      from_secret: container_image_registry_user
+    DEST_CRED_PASSWORD:
+      from_secret: container_image_registry_password
+  image: quay.io/skopeo/stable:v1.12.0
+
+- name: email-notification
+  environment:
+    SMTP_FROM_ADDRESS:
+      from_secret: smtp_from_address
+    SMTP_FROM_NAME:
+      from_secret: smtp_from_name
+    SMTP_HOST:
+      from_secret: smtp_host
+    SMTP_USERNAME:
+      from_secret: smtp_username
+    SMTP_PASSWORD:
+      from_secret: smtp_password
+  image: git.cryptic.systems/volker.raschek/drone-email:0.1.2
+  resources:
+    limits:
+      cpu: 150
+      memory: 150M
+  when:
+    status:
+    - changed
+    - failure
 
 trigger:
   event:

@@ -5,8 +5,8 @@ CONTAINER_RUNTIME?=$(shell which podman)
 
 # CONTAINER_IMAGE
 # Defines the name of the new container to be built using several variables.
-BUILD_IMAGE_REGISTRY_HOST:=docker.io
-BUILD_IMAGE_REGISTRY_USER:=volkerraschek
+BUILD_IMAGE_REGISTRY_HOST:=git.cryptic.systems
+BUILD_IMAGE_REGISTRY_USER:=volker.raschek
 BUILD_IMAGE_NAMESPACE?=${BUILD_IMAGE_REGISTRY_USER}
 BUILD_IMAGE_REPOSITORY:=build-image
 BUILD_IMAGE_VERSION?=latest
