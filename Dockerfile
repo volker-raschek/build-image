@@ -43,9 +43,8 @@ RUN sudo pacman --sync --refresh --noconfirm --sysupgrade \
       oracle-instantclient-sdk \
       oracle-instantclient-sqlplus \
       oracle-instantclient-tools \
-      rpm-builder
-
-RUN rm --recursive --force /var/cache/pacman/pkg
+      rpm-builder && \
+    sudo rm --recursive --force /var/cache/pacman/pkg
 
 RUN sudo mkdir /workspace && sudo chown ${BUILD_USER}:${BUILD_USER} /workspace
 WORKDIR /workspace
