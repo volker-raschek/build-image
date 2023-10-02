@@ -8,7 +8,7 @@ clone:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: markdown lint
   commands:
@@ -63,7 +63,7 @@ platform:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: build
   image: docker.io/plugins/docker:20.10.9
@@ -129,7 +129,7 @@ platform:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: build
   image: docker.io/plugins/docker:20.10.9
@@ -194,7 +194,7 @@ node_selector:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: build-manifest
   image: docker.io/plugins/manifest:1.4.0
@@ -251,7 +251,7 @@ depends_on:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: latest-sync
   commands:
@@ -312,7 +312,7 @@ platform:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: build
   image: docker.io/plugins/docker:20.10.9
@@ -374,7 +374,7 @@ node_selector:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: build-manifest
   image: docker.io/plugins/manifest:1.4.0
@@ -428,7 +428,7 @@ depends_on:
 
 steps:
 - name: clone
-  image: git.cryptic.systems/volker.raschek/git:1.2.1
+  image: git.cryptic.systems/volker.raschek/git:1.3.1
 
 - name: tagged-sync
   commands:
