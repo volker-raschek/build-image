@@ -265,7 +265,7 @@ steps:
       from_secret: container_image_registry_user
     DEST_CRED_PASSWORD:
       from_secret: container_image_registry_password
-  image: quay.io/skopeo/stable:v1.14.0
+  image: quay.io/skopeo/stable:v1.14.2
 
 - name: email-notification
   environment:
@@ -442,7 +442,7 @@ steps:
       from_secret: container_image_registry_user
     DEST_CRED_PASSWORD:
       from_secret: container_image_registry_password
-  image: quay.io/skopeo/stable:v1.14.0
+  image: quay.io/skopeo/stable:v1.14.2
 
 - name: email-notification
   environment:
